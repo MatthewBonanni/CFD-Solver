@@ -15,7 +15,7 @@ dsys::dsys(double dt_in, double x0, double y0){
 
 void dsys::fill_tvec(double tmax){
 	// Compute number of required steps
-	float N = (tmax / dt) + 1;
+	int N = (tmax / dt) + 1;
 
     t.resize(N);
     x.resize(N+1);
@@ -29,6 +29,12 @@ void dsys::fill_tvec(double tmax){
 	}
 }
 
+void dsys::set_vel(double (*u_in)(double, double, double),
+				   double (*v_in)(double, double, double)){
+	u = *u_in;
+	v = *v_in;
+}
+
 void dsys::march_ie(){
     // Initialize neighbor variables
 	double u_n = 0, v_n = 0;
@@ -37,8 +43,8 @@ void dsys::march_ie(){
 	for (std::size_t i = 0; i != t.size(); ++i){
 
 		// Compute velocity components
-		u_n = x[i] - y[i] + 1;
-		v_n = 2 * x[i] - y[i];
+		u_n = u(t[i], x[i], y[i]);
+		v_n = v(t[i], x[i], y[i]);
 
 		// Apply Euler
 		x[i+1] = x[i] + dt * u_n;
@@ -55,8 +61,8 @@ void dsys::march_ab(){
 	for (std::size_t i = 0; i != t.size(); ++i){
 
 		// Compute velocity components
-		u_n = x[i] - y[i] + 1;
-		v_n = 2 * x[i] - y[i];
+		u_n = u(t[i], x[i], y[i]);
+		v_n = v(t[i], x[i], y[i]);
 
 		// Apply Euler for first step
 		if (i == 1){
