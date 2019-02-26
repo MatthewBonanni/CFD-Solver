@@ -1,8 +1,10 @@
-dsys: dsys_ab.o
-	g++ dsys_ab.o -o dsys
+out: main.o dsys.o
+	g++ main.o dsys.o -o out
 
-dsys_ab.o: dsys_ab.cpp
-	g++ -std=c++11 -c dsys_ab.cpp
+main.o: main.cpp
+	g++ -std=c++17 -c main.cpp
+dsys.o: dsys.cpp
+	g++ -std=c++17 -c dsys.cpp
 
 clean:
-	rm *.o dsys
+	rm *.o out
