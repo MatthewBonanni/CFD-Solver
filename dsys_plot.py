@@ -7,7 +7,7 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
 # Import data
-file = "dynsys_data.csv"
+file = "dsys_data.csv"
 data = pd.read_csv(file)
 
 # Plot data

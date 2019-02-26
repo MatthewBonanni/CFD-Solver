@@ -107,7 +107,7 @@ dbvec tvec(double t0, double dt, double tmax){
 // Exports trajectory data to csv
 void write_out(tpos &traj){
 	std::ofstream outfile;
-	outfile.open("dynsys_data.csv");
+	outfile.open("dsys_data.csv");
 
 	// Write headers
 	outfile << "t,x,y\n";
