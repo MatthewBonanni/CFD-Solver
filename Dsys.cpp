@@ -1,9 +1,9 @@
-#include "dsys.h"
+#include "Dsys.h"
 #include <cstdio>
 #include <fstream>
 #include <string>
 
-dsys::dsys(double dt_in, double x0, double y0){
+Dsys::Dsys(double dt_in, double x0, double y0){
     dt = dt_in;
 
     x.resize(1);
@@ -13,7 +13,7 @@ dsys::dsys(double dt_in, double x0, double y0){
     y[0] = y0;
 }
 
-void dsys::fill_tvec(double tmax){
+void Dsys::FillTvec(double tmax){
 	// Compute number of required steps
 	int N = (tmax / dt) + 1;
 
@@ -29,13 +29,13 @@ void dsys::fill_tvec(double tmax){
 	}
 }
 
-void dsys::set_vel(double (*u_in)(double, double, double),
-				   double (*v_in)(double, double, double)){
+void Dsys::SetVel(double (*u_in)(double, double, double),
+				  double (*v_in)(double, double, double)){
 	u = *u_in;
 	v = *v_in;
 }
 
-void dsys::march_ie(){
+void Dsys::MarchIE(){
     // Initialize neighbor variables
 	double u_n = 0, v_n = 0;
 
@@ -52,7 +52,7 @@ void dsys::march_ie(){
 	}
 }
 
-void dsys::march_ab(){
+void Dsys::MarchAB(){
     // Initialize neighbor variables
 	double u_n = 0, v_n = 0;
 	double u_nm1 = 0, v_nm1 = 0;
@@ -82,18 +82,18 @@ void dsys::march_ab(){
 	}
 }
 
-double dsys::getdt(){
+double Dsys::GetDt(){
     return dt;
 }
 
-void dsys::printtraj(){
+void Dsys::PrintTraj(){
     printf("%6c%6c%6c\n", 't', 'x', 'y');
     for (std::size_t i = 0; i != t.size(); ++i){
         printf("%6.2f%6.2f%6.2f\n", t[i], x[i], y[i]);
     }
 }
 
-void dsys::export_data(std::string filename){
+void Dsys::ExportData(std::string filename){
     std::ofstream outfile;
 	outfile.open(filename);
 

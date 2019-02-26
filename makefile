@@ -1,10 +1,10 @@
-out: main.o dsys.o
-	g++ main.o dsys.o -o out
+out: main.o Dsys.o
+	g++ main.o Dsys.o -o out
 
 main.o: main.cpp
 	g++ -std=c++17 -c main.cpp
-dsys.o: dsys.cpp
-	g++ -std=c++17 -c dsys.cpp
+Dsys.o: Dsys.cpp
+	g++ -std=c++17 -c Dsys.cpp
 
 clean:
 	rm *.o out
