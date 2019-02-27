@@ -1,4 +1,4 @@
-import pandas as pd
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -7,17 +7,26 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
 # Import data
-file = "data.csv"
-data = pd.read_csv(file)
+data = json.load(open('data.json', 'r'))
 
-# Plot data
+# Create figure
 fig = plt.figure()
-plt.plot(data.x, data.y, 'b')
-plt.plot(data.x[0], data.y[0], 'ro')
-plt.plot(data.x[len(data.x)-1], data.y[len(data.y)-1], 'r*', markersize=10)
-plt.title('Dynamical System Solver - Trajectory', fontsize=14)
+plt.title('Particle Advection', fontsize=14)
 plt.xlabel('$x$', fontsize=14)
 plt.ylabel('$y$', fontsize=14)
-fig.savefig("trajectory.png")
+
+# Iterate through particles
+for i in data['parts']:
+    # Read data into array
+    x = np.array(i['x'])
+    y = np.array(i['y'])
+
+    # Plot data
+    plt.plot(x, y)
+    plt.plot(x[0], y[0], 'ro', markersize=5)
+    plt.plot(x[-1], y[-1], 'r*', markersize=5)
+
+# Save figure
+fig.savefig("advection.png")
 
 plt.show()
