@@ -3,6 +3,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra
 INC := -I include
 SRCDIR := src
 OBJDIR := obj
+TESTDIR := tests
 TARGET := bin/solve
 OUTFILE := data/data.json
 

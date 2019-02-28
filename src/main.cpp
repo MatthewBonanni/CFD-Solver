@@ -1,6 +1,8 @@
 #include "Dsys.h"
+#include "Matrix.h"
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 // Stokes drift
 /*
@@ -16,7 +18,27 @@ double v(double t, double x, double y){return (w*a*k)*exp(k*y)*sin(k*x-w*t);}
 double u(double t, double x, double y){return y*t - x;}
 double v(double t, double x, double y){return -x*sin(x - t);}
 
+void solve();
+
 int main(){
+    Matrix m (4, 4, 0);
+    m.PrintMatrix();
+
+    Matrix in (2, 2, 1);
+    in.PrintMatrix();
+
+    m.SetSub(1, 1, in);
+    m.SetElt(1, 2, 3);
+
+    Matrix n;
+
+    n = m.T();
+
+    m.PrintMatrix();
+    n.PrintMatrix();
+}
+
+void solve(){
     // Step size
     double dt = 0.01;
 

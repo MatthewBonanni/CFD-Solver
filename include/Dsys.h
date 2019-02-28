@@ -12,6 +12,7 @@ class Dsys {
         std::function<double(double, double, double)> u;
         std::function<double(double, double, double)> v;
     public:
+        Dsys() {};
         Dsys(double, std::vector<double>, std::vector<double>);
         void FillTvec(double);
         void SetVel(double (*u_in)(double, double, double),
