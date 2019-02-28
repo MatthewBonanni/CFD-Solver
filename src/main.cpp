@@ -1,4 +1,4 @@
-#include "Dsys.hpp"
+#include "Dsys.h"
 #include <vector>
 #include <cmath>
 
@@ -30,5 +30,5 @@ int main(){
     sys1.MarchAB();
 
     // Export data
-    sys1.ExportData("data.json");
+    sys1.ExportData("out/data.json");
 }

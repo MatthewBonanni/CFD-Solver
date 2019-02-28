@@ -7,7 +7,7 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
 # Import data
-data = json.load(open('data.json', 'r'))
+data = json.load(open('out/data.json', 'r'))
 
 # Create figure
 fig = plt.figure()
@@ -27,6 +27,6 @@ for i in data['parts']:
     plt.plot(x[-1], y[-1], 'r*', markersize=5)
 
 # Save figure
-fig.savefig("advection.png")
+fig.savefig("out/advection.png")
 
 plt.show()
