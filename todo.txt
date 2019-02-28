@@ -1,0 +1,2 @@
+- Handle diverging trajectories more gracefully in plot
+- ODE solver - relaxation method

@@ -84,7 +84,9 @@ void Dsys::MarchEE(){
 void Dsys::MarchAB(){
     // Initialize neighbor variables
 	double u_n = 0, v_n = 0;
-	double u_nm1 = 0, v_nm1 = 0;
+
+	std::vector<double> u_nm1(parts.size());
+	std::vector<double> v_nm1(parts.size());
 
 	// Time marching
 	for (std::size_t i = 0; i != t.size(); ++i){
@@ -97,20 +99,20 @@ void Dsys::MarchAB(){
 			v_n = v(t[i], parts[n].x[i], parts[n].y[i]);
 
 			// Apply Euler for first step
-			if (i == 1){
+			if (i == 0){
 				parts[n].x[i + 1] = parts[n].x[i] + dt * u_n;
 				parts[n].y[i + 1] = parts[n].y[i] + dt * v_n;
 			}
 
 			// Apply Adams-Bashforth
 			else{
-				parts[n].x[i + 1] = parts[n].x[i] + dt * ((3. / 2.) * u_n - (1. / 2.) * u_nm1);
-				parts[n].y[i + 1] = parts[n].y[i] + dt * ((3. / 2.) * v_n - (1. / 2.) * v_nm1);
+				parts[n].x[i + 1] = parts[n].x[i] + dt * ((3. / 2.) * u_n - (1. / 2.) * u_nm1[n]);
+				parts[n].y[i + 1] = parts[n].y[i] + dt * ((3. / 2.) * v_n - (1. / 2.) * v_nm1[n]);
 			}
 
 			// Write current velocities (n) to old variables (n-1)
-			u_nm1 = u_n;
-			v_nm1 = v_n;
+			u_nm1[n] = u_n;
+			v_nm1[n] = v_n;
 		}
 	}
 }
