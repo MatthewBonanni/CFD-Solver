@@ -37,7 +37,7 @@
 # Output data
 *.json
 
-# Build, binary, and output dirs
-build/*
+# Object, binary, and output dirs
+obj/*
 bin/*
 out/*

@@ -40,5 +40,5 @@ int main(){
     sys1.MarchAB();
 
     // Export data
-    sys1.ExportData("out/data.json");
+    sys1.ExportData("data/traj.json");
 }

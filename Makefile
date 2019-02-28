@@ -1,23 +1,25 @@
-CC := g++
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra
+INC := -I include
 SRCDIR := src
-BUILDDIR := build
+OBJDIR := obj
 TARGET := bin/solve
-OUTFILE := out/data.json
+OUTFILE := data/data.json
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -std=c++17 -g
-INC := -I include
+OBJECTS := $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 
 $(TARGET): $(OBJECTS)
 	@echo "Linking..."
-	@echo "$(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+	@echo "$(CXX) $^ -o $(TARGET) $(LIB)"; $(CXX) $^ -o $(TARGET) $(LIB)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
-	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+$(OBJDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(OBJDIR)
+	@echo "$(CXX) $(CXXFLAGS) $(INC) -c -o $@ $<"; $(CXX) $(CXXFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo "Cleaning..."; 
-	@echo "$(RM) -r $(BUILDDIR) $(TARGET) $(OUTFILE)"; $(RM) -r $(BUILDDIR) $(TARGET) $(OUTFILE)
+	@echo "$(RM) -r $(OBJDIR) $(TARGET) $(OUTFILE)"; $(RM) -r $(OBJDIR) $(TARGET) $(OUTFILE)
+
+.PHONY: all build clean debug release
