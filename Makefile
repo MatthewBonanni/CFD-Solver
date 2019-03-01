@@ -1,6 +1,7 @@
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra
-INC := -I include
+INC := -I include -I lib
+LIB := -L lib
 SRCDIR := src
 OBJDIR := obj
 TESTDIR := tests

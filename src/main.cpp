@@ -1,8 +1,10 @@
 #include "Dsys.h"
-#include "Matrix.h"
+#include "eigen/Eigen/Dense"
 #include <vector>
 #include <cmath>
 #include <iostream>
+
+using namespace Eigen;
 
 // Stokes drift
 /*
@@ -21,21 +23,10 @@ double v(double t, double x, double y){return -x*sin(x - t);}
 void solve();
 
 int main(){
-    Matrix m (4, 4, 0);
-    m.PrintMatrix();
+    MatrixXd m(3,3);
 
-    Matrix in (2, 2, 1);
-    in.PrintMatrix();
-
-    m.SetSub(1, 1, in);
-    m.SetElt(1, 2, 3);
-
-    Matrix n;
-
-    n = m.T();
-
-    m.PrintMatrix();
-    n.PrintMatrix();
+    m(0,0) = 3;
+    std::cout << m << std::endl;
 }
 
 void solve(){
