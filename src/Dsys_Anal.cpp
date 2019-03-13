@@ -1,4 +1,4 @@
-#include "Dsys.h"
+#include "Dsys_Anal.h"
 #include "json.hpp"
 #include <vector>
 #include <iostream>
@@ -10,38 +10,25 @@
 using json = nlohmann::json;
 
 // Class constructor
-Dsys::Dsys(double dt_in, std::vector<double> x0, std::vector<double> y0){
-    dt = dt_in;
+Dsys_Anal::Dsys_Anal(double dt_in, double tmax_in, 
+					 std::vector<double> x0, std::vector<double> y0,
+					 double (*u_in)(double, double, double),
+				  	 double (*v_in)(double, double, double)){
 
-	// Verify same quantity of x and y coords
-	if (x0.size() != y0.size()){
-		throw std::invalid_argument("Mismatched IC Vectors");
-	}
-
-	parts.resize(x0.size());
-
-	// Initialize position vectors for all particles
-	for (std::size_t n = 0; n != parts.size(); ++n){
-		parts[n].x.resize(1);
-		parts[n].y.resize(1);
-
-		parts[n].x[0] = x0[n];
-		parts[n].y[0] = y0[n];
-	}
+	SetTime(dt_in, tmax_in);
+    SetICs(x0, y0);
+	SetVel(*u_in, *v_in);
 }
 
-// Computes and fills time vector
-void Dsys::FillTvec(double tmax){
+// Sets time parameters
+void Dsys_Anal::SetTime(double dt_in, double tmax_in){
+	dt = dt_in;
+	tmax = tmax_in;
+
 	// Compute number of required steps
 	int N = (tmax / dt) + 1;
 
     t.resize(N);
-
-	// Resize position vectors of all particles
-	for (std::size_t n = 0; n != parts.size(); ++n){
-		parts[n].x.resize(N + 1);
-		parts[n].y.resize(N + 1);
-	}
 
 	// Iterate through time vector
 	for (auto it = t.begin(); it != t.end(); ++it){
@@ -49,18 +36,57 @@ void Dsys::FillTvec(double tmax){
 
 		*it = dt * i;
 	}
+
+	t_set = true;
+
+	if (t_set && ic_set){
+		ResizeParts();
+	}
+}
+
+// Sets initial conditions
+void Dsys_Anal::SetICs(std::vector<double> x0, std::vector<double> y0){
+	// Verify same quantity of x and y coords
+	if (x0.size() != y0.size()){
+		throw std::invalid_argument("Mismatched IC Vectors");
+	}
+
+	parts.resize(x0.size());
+
+	// ResizeParts position vectors for all particles
+	for (std::size_t n = 0; n != parts.size(); ++n){
+		parts[n].x.resize(1);
+		parts[n].y.resize(1);
+
+		parts[n].x[0] = x0[n];
+		parts[n].y[0] = y0[n];
+	}
+
+	ic_set = true;
+
+	if (t_set && ic_set){
+		ResizeParts();
+	}
 }
 
 // Sets velocity field equations
-void Dsys::SetVel(double (*u_in)(double, double, double),
-				  double (*v_in)(double, double, double)){
+void Dsys_Anal::SetVel(double (*u_in)(double, double, double),
+				  	   double (*v_in)(double, double, double)){
 	u = *u_in;
 	v = *v_in;
 }
 
+void Dsys_Anal::ResizeParts(){
+	// Resize position vectors of all particles
+	for (std::size_t n = 0; n != parts.size(); ++n){
+		parts[n].x.resize(t.size() + 1);
+		parts[n].y.resize(t.size() + 1);
+	}
+}
+
 // Marches using Explicit Euler scheme
-void Dsys::MarchEE(){
-    // Initialize neighbor variables
+void Dsys_Anal::MarchEE(){
+    // ResizeParts neighbor variables
 	double u_n = 0, v_n = 0;
 
 	// Time marching
@@ -81,8 +107,8 @@ void Dsys::MarchEE(){
 }
 
 // Marches using Adams-Bashforth Scheme
-void Dsys::MarchAB(){
-    // Initialize neighbor variables
+void Dsys_Anal::MarchAB(){
+    // ResizeParts neighbor variables
 	double u_n = 0, v_n = 0;
 
 	std::vector<double> u_nm1(parts.size());
@@ -90,6 +116,7 @@ void Dsys::MarchAB(){
 
 	// Time marching
 	for (std::size_t i = 0; i != t.size(); ++i){
+		std::cout << i << std::endl;
 
 		// Iterate through particles
 		for (std::size_t n = 0; n != parts.size(); ++n){
@@ -109,6 +136,7 @@ void Dsys::MarchAB(){
 				parts[n].x[i + 1] = parts[n].x[i] + dt * ((3. / 2.) * u_n - (1. / 2.) * u_nm1[n]);
 				parts[n].y[i + 1] = parts[n].y[i] + dt * ((3. / 2.) * v_n - (1. / 2.) * v_nm1[n]);
 			}
+			std::cout << parts[n].x[i + 1] << std::endl;
 
 			// Write current velocities (n) to old variables (n-1)
 			u_nm1[n] = u_n;
@@ -117,13 +145,8 @@ void Dsys::MarchAB(){
 	}
 }
 
-// Gets step size
-double Dsys::GetDt(){
-    return dt;
-}
-
 // Prints trajectory data for given particle
-void Dsys::PrintTraj(int n){
+void Dsys_Anal::PrintTraj(int n){
 	// Print column headers
 	printf("%6c%6c%6c\n", 't', 'x', 'y');
 
@@ -134,7 +157,7 @@ void Dsys::PrintTraj(int n){
 }
 
 // Exports data to given file
-void Dsys::ExportData(std::string filename){
+void Dsys_Anal::ExportData(std::string filename){
 	// Create json object
 	json j;
 

@@ -1,4 +1,4 @@
-#include "Dsys.h"
+#include "Dsys_Anal.h"
 #include "eigen/Eigen/Dense"
 #include <vector>
 #include <cmath>
@@ -23,31 +23,22 @@ double v(double t, double x, double y){return -x*sin(x - t);}
 void solve();
 
 int main(){
-    MatrixXd m(3,3);
-
-    m(0,0) = 3;
-    std::cout << m << std::endl;
+    solve();
 }
 
 void solve(){
     // Step size
     double dt = 0.01;
 
+    // Advection duration
+    double tmax = 10;
+
     // Initial conditions of particles
     std::vector<double> x0 = {0, 0, 0, 0, 0, 0, 0};
     std::vector<double> y0 = {0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6};
 
-    // Advection duration
-    double tmax = 10;
-
     // Construct dynamical system
-    Dsys sys1 (dt, x0, y0);
-
-    // Compute and fill time vector
-    sys1.FillTvec(tmax);
-
-    // Set velocity field
-    sys1.SetVel(*u, *v);
+    Dsys_Anal sys1 (dt, tmax, x0, y0, *u, *v);
 
     // March using Adams-Bashforth Scheme
     sys1.MarchAB();
