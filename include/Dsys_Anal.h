@@ -3,12 +3,13 @@
 #include <functional>
 
 class Dsys_Anal {
-        double dt;
-        double tmax;
-        std::vector<double> t;
         struct Particle {
             std::vector<double> x, y;
         };
+
+        double dt;
+        double tmax;
+        std::vector<double> t;
         std::vector<Particle> parts;
         std::function<double(double, double, double)> u;
         std::function<double(double, double, double)> v;

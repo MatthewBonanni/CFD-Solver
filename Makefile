@@ -6,7 +6,7 @@ SRCDIR := src
 OBJDIR := obj
 TESTDIR := tests
 TARGET := bin/solve
-OUTFILE := data/data.json
+OUTFILE := data/*.json
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))

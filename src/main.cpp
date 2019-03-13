@@ -6,43 +6,49 @@
 
 using namespace Eigen;
 
-// Stokes drift
-/*
-double w = 2 * M_PI;
-double k = 1;
-double a = 0.1;
-
-double u(double t, double x, double y){return (w*a*k)*exp(k*y)*cos(k*x-w*t);}
-double v(double t, double x, double y){return (w*a*k)*exp(k*y)*sin(k*x-w*t);}
-*/
-
-// Velocity field equations
-double u(double t, double x, double y){return y*t - x;}
-double v(double t, double x, double y){return -x*sin(x - t);}
-
-void solve();
+void sample_1();
+void sample_2();
 
 int main(){
-    solve();
+    sample_1();
 }
 
-void solve(){
-    // Step size
+// Cool looking sample
+void sample_1(){
+
+    auto u = [] (double t, double x, double y) {return y*t - x;};
+    auto v = [] (double t, double x, double y) {return -x*sin(x - t);};
+
     double dt = 0.01;
 
-    // Advection duration
     double tmax = 10;
 
-    // Initial conditions of particles
     std::vector<double> x0 = {0, 0, 0, 0, 0, 0, 0};
     std::vector<double> y0 = {0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6};
 
-    // Construct dynamical system
-    Dsys_Anal sys1 (dt, tmax, x0, y0, *u, *v);
+    Dsys_Anal sys1 (dt, tmax, x0, y0, u, v);
 
-    // March using Adams-Bashforth Scheme
     sys1.MarchAB();
 
-    // Export data
-    sys1.ExportData("data/traj.json");
+    sys1.ExportData("data/sample_1.json");
+}
+
+// Stokes drift
+void sample_2(){
+
+    auto u = [] (double t, double x, double y) {return (0.2*M_PI)*exp(y)*cos(x-(2*M_PI)*t);};
+    auto v = [] (double t, double x, double y) {return (0.2*M_PI)*exp(y)*sin(x-(2*M_PI)*t);};
+
+    double dt = 0.01;
+
+    double tmax = 10;
+
+    std::vector<double> x0 = {0, 0, 0, 0, 0};
+    std::vector<double> y0 = {-0.1, -0.2, -0.3, -0.4, -0.5};
+
+    Dsys_Anal sys1 (dt, tmax, x0, y0, u, v);
+
+    sys1.MarchAB();
+
+    sys1.ExportData("data/sample_2.json");
 }

@@ -1,3 +1,4 @@
+import sys
 import json
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +8,7 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
 # Import data
-data = json.load(open('data/traj.json', 'r'))
+data = json.load(open('data/' + sys.argv[1], 'r'))
 
 # Create figure
 fig = plt.figure()
