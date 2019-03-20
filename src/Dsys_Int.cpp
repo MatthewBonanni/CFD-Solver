@@ -154,7 +154,7 @@ void Dsys_Int::PrintTraj(int n){
     printf("%6c%6c%6c\n", 't', 'x', 'y');
 
     // Iterate through position vectors
-    for (std::size_t i = 0; i != t.size(); ++i){
+    for (std::size_t i = 0; i != t_count; ++i){
         printf("%6.2f%6.2f%6.2f\n", t[i], parts[n].x(i), parts[n].y(i));
     }
 }
