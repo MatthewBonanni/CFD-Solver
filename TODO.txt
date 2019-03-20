@@ -1,3 +1,3 @@
 - Handle diverging trajectories more gracefully in plot
-- ODE BVP solver - relaxation method
-- griddata implementation for pathlines, streamlines
+- PDE solver - relaxation method
+- CFDio.h

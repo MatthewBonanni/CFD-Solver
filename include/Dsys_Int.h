@@ -5,7 +5,7 @@
 
 using namespace Eigen;
 
-class Dsys_Anal {
+class Dsys_Int {
         struct Particle {
             VectorXd x, y;
         };
@@ -16,21 +16,23 @@ class Dsys_Anal {
         int t_count;
 
         std::vector<Particle> parts;
-        std::function<double(double, double, double)> u;
-        std::function<double(double, double, double)> v;
+        VectorXd x_data;
+        VectorXd y_data;
+        VectorXd u_data;
+        VectorXd v_data;
 
         bool t_set = false;
         bool ic_set = false;
     public:
-        Dsys_Anal() {};
-        Dsys_Anal(double, double,
-                  VectorXd, VectorXd,
-                  double (*u_in)(double, double, double),
-                  double (*v_in)(double, double, double));
+        Dsys_Int() {};
+        Dsys_Int(double, double,
+                 VectorXd, VectorXd,
+                 VectorXd, VectorXd,
+                 VectorXd, VectorXd);
         void SetTime(double, double);
         void SetICs(VectorXd, VectorXd);
-        void SetVel(double (*u_in)(double, double, double),
-                    double (*v_in)(double, double, double));
+        void SetVel(VectorXd, VectorXd,
+                    VectorXd, VectorXd);
         void MarchEE();
         void MarchAB();
         void PrintTraj(int);

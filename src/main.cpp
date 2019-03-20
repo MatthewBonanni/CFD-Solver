@@ -1,4 +1,5 @@
 #include "Dsys_Anal.h"
+//#include "Dsys_Int.h"
 #include "eigen/Eigen/Dense"
 #include <vector>
 #include <cmath>
@@ -23,8 +24,11 @@ void sample_1(){
 
     double tmax = 10;
 
-    std::vector<double> x0 = {0, 0, 0, 0, 0, 0, 0};
-    std::vector<double> y0 = {0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6};
+    VectorXd x0(7);
+    VectorXd y0(7);
+
+    x0 << 0, 0, 0, 0, 0, 0, 0;
+    y0 << 0, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6;
 
     Dsys_Anal sys1 (dt, tmax, x0, y0, u, v);
 
@@ -43,8 +47,11 @@ void sample_2(){
 
     double tmax = 10;
 
-    std::vector<double> x0 = {0, 0, 0, 0, 0};
-    std::vector<double> y0 = {-0.1, -0.2, -0.3, -0.4, -0.5};
+    VectorXd x0(5);
+    VectorXd y0(5);
+    
+    x0 << 0, 0, 0, 0, 0;
+    y0 << -0.1, -0.2, -0.3, -0.4, -0.5;
 
     Dsys_Anal sys1 (dt, tmax, x0, y0, u, v);
 
