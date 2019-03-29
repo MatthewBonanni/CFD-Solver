@@ -25,7 +25,6 @@ for i in data['parts']:
     # Plot data
     plt.plot(x, y)
     plt.plot(x[0], y[0], 'ro', markersize=5)
-    plt.plot(x[-1], y[-1], 'r*', markersize=5)
 
 # Save figure
 fig.savefig("data/advection.png")

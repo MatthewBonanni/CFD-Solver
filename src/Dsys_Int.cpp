@@ -72,7 +72,7 @@ void Dsys_Int::SetICs(VectorXd x0, VectorXd y0){
     }
 }
 
-// Sets velocity field equations
+// Sets velocity field data
 void Dsys_Int::SetVel(VectorXd x_in, VectorXd y_in,
                       VectorXd u_in, VectorXd v_in){
     x_data = x_in;
